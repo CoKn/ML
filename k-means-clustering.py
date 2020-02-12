@@ -74,15 +74,11 @@ def relocate_clusters():
 def loop_functions():
     """loop functions cluster_data and relocate_clusters until the centers dose not change any more"""
     old = copy.deepcopy(relocate_clusters())
-    print(id(old))
     cluster_data()
     new = copy.deepcopy(relocate_clusters())
-    print(id(new))
     cluster_data()
     while old != new:
-        del old
         old = new
-        del new
         new = copy.deepcopy(relocate_clusters())
         print(new)
     print('Final center at: ' + str(new))
