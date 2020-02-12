@@ -50,7 +50,6 @@ def cluster_data():
             distance_list.clear()
         dp_list[i][0] = euclidean_d.index(min(euclidean_d))  # edge case zwei gleiche werte
         euclidean_d.clear()
-    # print(dp_list)
     return dp_list
 
 
@@ -68,24 +67,22 @@ def relocate_clusters():
             if n > 0:
                 mean = sum(sum_list) / n
             cc_list[i][j] = mean
-    # print (cc_list)
     return cc_list
 
 
 def loop_functions():
     """loop functions cluster_data and relocate_clusters until the centers dose not change any more"""
-    while True:
-        old = relocate_clusters()
-        print(old)
-        cluster_data()
-        new = relocate_clusters()
-        print(id(new))
-        print(id(old))
-        if old == new:
-            print('Final center at: ' + str(new))
-            break
-        else:
-            cluster_data()
+    old = tuple(relocate_clusters().copy())
+    print(old)
+    cluster_data()
+    new = tuple(relocate_clusters().copy())
+    cluster_data()
+    while old != new:
+        del old
+        old = new
+        del new
+        new = tuple(relocate_clusters().copy())
+    print('Final center at: ' + str(new))
     return cc_list
 
 
