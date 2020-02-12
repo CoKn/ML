@@ -1,5 +1,6 @@
 import random
 import math
+import copy
 
 dp_list = []
 cc_list = []
@@ -32,8 +33,8 @@ def create_cc():
             cc_list.append(dp_list[random.randint(0, len(dp_list) - 1)][1])
         else:
             cc_list.append(dp_list[random.randint(0, len(dp_list) - 1)][1])
-            if cc_list[i - 1] == cc_list[i]:
-                cc_list[i] = dp_list[random.randint(0, len(dp_list) - 1)][1]  # checken
+            while cc_list[i] in cc_list[:-1]:
+                cc_list[i] = dp_list[random.randint(0, len(dp_list) - 1)][1]
     print(cc_list)
     return cc_list
 
@@ -72,16 +73,18 @@ def relocate_clusters():
 
 def loop_functions():
     """loop functions cluster_data and relocate_clusters until the centers dose not change any more"""
-    old = tuple(relocate_clusters().copy())
-    print(old)
+    old = copy.deepcopy(relocate_clusters())
+    print(id(old))
     cluster_data()
-    new = tuple(relocate_clusters().copy())
+    new = copy.deepcopy(relocate_clusters())
+    print(id(new))
     cluster_data()
     while old != new:
         del old
         old = new
         del new
-        new = tuple(relocate_clusters().copy())
+        new = copy.deepcopy(relocate_clusters())
+        print(new)
     print('Final center at: ' + str(new))
     return cc_list
 
