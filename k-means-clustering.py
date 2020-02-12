@@ -57,7 +57,7 @@ def cluster_data():
 def relocate_clusters():
     """function to relocate cluster centers"""
     for i in range(len(cc_list)):
-        for j in range(len(cc_list[i])):        # 0 edge case
+        for j in range(len(cc_list[i])):
             sum_list = []
             n = 0
             mean = 0
@@ -76,13 +76,13 @@ def loop_functions():
     """loop functions cluster_data and relocate_clusters until the centers dose not change any more"""
     while True:
         old = relocate_clusters()
-        print (old)
+        print(old)
         cluster_data()
         new = relocate_clusters()
-        print (id(new))
-        print (id(old))
+        print(id(new))
+        print(id(old))
         if old == new:
-            print ('Final center at: ' + str(new))
+            print('Final center at: ' + str(new))
             break
         else:
             cluster_data()
