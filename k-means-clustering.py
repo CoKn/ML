@@ -4,13 +4,14 @@ import copy
 
 dp_list = []
 cc_list = []
+accuracy = 0
 
 
 def create_data():
-    """function to create random data points in n dimensions"""
-    print('How many data point do you want to create?')
+    """function to create m random data points in n dimensions"""
+    print('How many data points do you want to create?')
     input_data = input()
-    print('How many dimensions should your data point have?')
+    print('How many dimensions should your data points have?')
     input_dimensions = input()
     global dp_list
     for i in range(0, int(input_data)):
@@ -39,8 +40,19 @@ def create_cc():
     return cc_list
 
 
+def define_accuracy():
+    """function to define the accuracy of the clusters"""
+    print('Set your accuracy.')
+    global accuracy
+    accuracy = float(input())
+    while 0 > accuracy or accuracy > 1:
+        print('The accuracy can not be higher than 1!')
+        accuracy = float(input())
+    return accuracy
+
+
 def cluster_data():
-    """function to calculate the euclidean distance and selecting a cluster for the data points"""
+    """function to calculate the euclidean distance and selecting a cluster for each data point"""
     distance_list = []
     euclidean_d = []
     for i in range(len(dp_list)):
@@ -49,7 +61,7 @@ def cluster_data():
                 distance_list.append((dp_list[i][1][k] - cc_list[j][k]) ** 2)
             euclidean_d.append(math.sqrt(sum(distance_list)))
             distance_list.clear()
-        dp_list[i][0] = euclidean_d.index(min(euclidean_d))  # edge case zwei gleiche werte
+        dp_list[i][0] = euclidean_d.index(min(euclidean_d))
         euclidean_d.clear()
     return dp_list
 
@@ -78,14 +90,23 @@ def loop_functions():
     new = copy.deepcopy(relocate_clusters())
     cluster_data()
     while old != new:
+        acc_list = []
+        difference_list = []
+        for i in range(len(old)):
+            for j in range(len(old[i])):
+                difference_list.append(math.sqrt((old[i][j] - new[i][j])**2))
+                acc_list.append(old[i][j] * (1 - accuracy))
+        if sum(difference_list) <= sum(acc_list):
+            break
         old = new
         new = copy.deepcopy(relocate_clusters())
         print(new)
-    print('Final center at: ' + str(new))
-    return cc_list
+    print('Final centers at: ' + str(new))
+    return new
 
 
 create_data()
 create_cc()
+define_accuracy()
 cluster_data()
 loop_functions()
