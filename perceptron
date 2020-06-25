@@ -1,0 +1,43 @@
+def sum_func(input_list, weigth_list, bias):
+    """cal sum of inputs*weigths + bias"""
+    omega = 0
+    for input_p, weight_p in zip(input_list, weigth_list):
+        omega += weight_p * input_p
+    omega += bias
+    return omega
+
+
+def evaluate(omega):
+    """check trashold"""
+    output = 0
+    if omega > 0:
+        output = 1
+    else:
+        output = 0
+    return output
+
+
+def adjust_weights(input_list, weight_list, output, learning_rate):
+    """adjust input weights"""
+    delta_omega = []
+    temp_array = []     
+    for input_p, weight_p in zip(input_list, weight_list):
+            delta_omega.append(learning_rate*(true_lable\
+            - output)*input_p)
+    for elem, weight_p in zip(delta_omega, weight_list):
+        temp_array.append(weight_p + elem)
+    weight_list = temp_array 
+    return weight_list
+
+
+def training(input_list, weight_list, bias, learning_rate, true_lable):
+    """loop functions"""
+    i = 0
+    output = evaluate(sum_func(input_list, weight_list, bias))
+    while True:
+        i += 1
+        weight_list = adjust_weights(input_list,\ 
+        weight_list, output, learning_rate)
+        output = evaluate(sum_func(input_list, weight_list, bias))
+        if true_lable == output:
+            return weight_list, i
